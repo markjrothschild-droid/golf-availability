@@ -91,9 +91,9 @@ export function useAvailability(userId: string | undefined, weekStart: string) {
     setSaving(false)
   }
 
-  // Calculate overlap: slots where ALL users with availability have marked free
+  // Calculate overlap: slots where ALL 4 users have marked free
   function getOverlap(): Record<string, string[]> {
-    if (allAvailability.length === 0) return {}
+    if (allAvailability.length < 4) return {}
     const overlap: Record<string, string[]> = {}
     const days: DayKey[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 
