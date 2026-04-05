@@ -52,7 +52,7 @@ export default function OverlapSummary({ overlap, allAvailability, profiles }: O
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
       <h3 className="font-semibold text-green-800 mb-3">
-        {hasOverlap ? '&#9971; Everyone Can Play' : 'Overlap Summary'}
+        {hasOverlap ? '\u26F3 Everyone Can Play' : 'Overlap Summary'}
       </h3>
 
       {hasOverlap ? (
