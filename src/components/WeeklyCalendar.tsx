@@ -40,7 +40,7 @@ export default function WeeklyCalendar({ mySlots, overlap, dayDates, onToggle }:
                         isOverlap
                           ? 'bg-green-400 border-green-500 ring-2 ring-green-300'
                           : isSelected
-                            ? 'bg-green-200 border-green-300'
+                            ? 'bg-blue-200 border-blue-300'
                             : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
                       }`}
                       title={`${d.label} ${formatTime(time)}${isOverlap ? ' - Everyone free!' : isSelected ? ' - You\'re free' : ''}`}

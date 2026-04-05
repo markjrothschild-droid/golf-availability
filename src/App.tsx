@@ -81,7 +81,7 @@ export default function App() {
         {/* Legend */}
         <div className="flex items-center gap-4 text-xs text-gray-500">
           <div className="flex items-center gap-1">
-            <div className="w-4 h-4 rounded bg-green-200 border border-green-300"></div>
+            <div className="w-4 h-4 rounded bg-blue-200 border border-blue-300"></div>
             <span>You're free</span>
           </div>
           <div className="flex items-center gap-1">
