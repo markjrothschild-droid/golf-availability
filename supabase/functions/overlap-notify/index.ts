@@ -17,6 +17,24 @@ const DAY_LABELS: Record<string, string> = {
   fri: 'Friday', sat: 'Saturday', sun: 'Sunday',
 }
 
+const DAY_OFFSETS: Record<string, number> = {
+  mon: 0, tue: 1, wed: 2, thu: 3, fri: 4, sat: 5, sun: 6,
+}
+
+function getDateForDay(weekStart: string, day: string): string {
+  const date = new Date(weekStart + 'T00:00:00')
+  date.setDate(date.getDate() + DAY_OFFSETS[day])
+  return date.toISOString().split('T')[0]
+}
+
+function buildGolfNowUrl(date: string, slots: string[]): string {
+  const sorted = [...slots].sort()
+  const startHour = parseInt(sorted[0].split(':')[0])
+  const lastSlot = sorted[sorted.length - 1]
+  const endHour = parseInt(lastSlot.split(':')[0]) + 1
+  return `https://www.golfnow.com/tee-times/search#sortby=Date&zip=48168&date=${date}&timemin=${startHour}&timemax=${endHour}`
+}
+
 function formatTime(slot: string): string {
   const [h, m] = slot.split(':')
   const hour = parseInt(h)
@@ -105,10 +123,14 @@ Deno.serve(async (req) => {
     })
   }
 
-  // Build the overlap summary for the email
+  // Build the overlap summary for the email with GolfNow links
   const overlapHtml = days
     .filter(d => overlap[d]?.length > 0)
-    .map(d => `<li><strong>${DAY_LABELS[d]}:</strong> ${groupSlots(overlap[d]).join(', ')}</li>`)
+    .map(d => {
+      const date = getDateForDay(week_start, d)
+      const golfNowUrl = buildGolfNowUrl(date, overlap[d])
+      return `<li><strong>${DAY_LABELS[d]}:</strong> ${groupSlots(overlap[d]).join(', ')} — <a href="${golfNowUrl}" style="color: #16a34a; text-decoration: underline;">Search GolfNow</a></li>`
+    })
     .join('')
 
   // Get all profiles
@@ -133,7 +155,7 @@ Deno.serve(async (req) => {
             <h2 style="color: #166534;">&#9971; Tee time found!</h2>
             <p>Great news — all 4 of you are free at the same time this week (${week_start}):</p>
             <ul style="line-height: 1.8;">${overlapHtml}</ul>
-            <p>Get a tee time booked before the slots fill up!</p>
+            <p>Click the GolfNow links above to find available tee times near 48168!</p>
             <p style="color: #9ca3af; font-size: 12px; margin-top: 32px;">Golf Availability App</p>
           </div>
         `,
